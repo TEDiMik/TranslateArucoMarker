@@ -1,4 +1,5 @@
 import httplib2
+import math
 #import cv2
 #import numpy as np
 #import cv2, PIL
@@ -24,8 +25,13 @@ out = open('img.jpg', 'wb')
 out.write(content)
 out.close()
 '''
+def calculateDistance(x1,y1,x2,y2):  
+     dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)  
+     return dist  
 
-frame = cv2.imread("img.jpg")
+
+
+frame = cv2.imread("Sample/img2.jpg")
 
 #----------------------------------------------------------------------
 '''
@@ -56,7 +62,7 @@ gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 aruco_dict = aruco.Dictionary_get(cv2.aruco.DICT_4X4_250)
 
 parameters = aruco.DetectorParameters_create()
-parameters.adaptiveThreshConstant = 10
+#parameters.adaptiveThreshConstant = 7
 
 
 corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
@@ -80,6 +86,18 @@ if np.all(ids != None):
         plt.plot([c[:, 0].mean()], [c[:, 1].mean()], "o", label = "id={0}".format(ids[i]))
     plt.legend()
     plt.show()
+
+    
+    
+    x = int (corners[0][0][0][0])
+    y = int (corners[0][0][0][1])
+    frameCOlor = cv2.line(frame_markers,(x,y),(0,0),(255,0,0),5)
+    print('x =', x)
+    print('y =', y)
+    plt.imshow(frameCOlor)
+    
+    plt.show()
+
 
 
 else:
