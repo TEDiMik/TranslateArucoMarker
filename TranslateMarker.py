@@ -89,8 +89,8 @@ if np.all(ids != None):
 
     
     
-    x = int (corners[0][0][0][0])
-    y = int (corners[0][0][0][1])
+    x = int (corners[2][0][0][0])
+    y = int (corners[2][0][0][1])
     frameCOlor = cv2.line(frame_markers,(x,y),(0,0),(255,0,0),5)
     print('x =', x)
     print('y =', y)
