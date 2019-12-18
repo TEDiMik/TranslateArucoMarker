@@ -89,11 +89,21 @@ if np.all(ids != None):
 
     
     #corners[id marker][NotUnderstand][angle][SmallNotUnderstand]
-    x = int (corners[2][0][2][0])
-    y = int (corners[2][0][2][1])
+    x = int (corners[1][0][0][0])
+    y = int (corners[1][0][0][1])
+
+    x1 = int (corners[2][0][0][0])
+    y1 = int (corners[2][0][0][1])
+
+    dist = calculateDistance(x,y,x1,y1)
+    print('DISTANCE: ', dist)
+
     frameCOlor = cv2.line(frame_markers,(x,y),(0,0),(255,0,0),5)
+    frameCOlor = cv2.line(frame_markers,(x1,y1),(0,0),(255,0,0),5)
     print('x =', x)
     print('y =', y)
+
+    
     plt.imshow(frameCOlor)
     
     plt.show()
