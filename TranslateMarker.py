@@ -13,7 +13,6 @@ from cv2 import aruco
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
-
 import numpy as np
 import cv2
 import glob
@@ -33,10 +32,17 @@ def calculateDistance(x1,y1,x2,y2):
 
 frame = cv2.imread("Sample/img2.jpg")
 
+hsv_min = np.array((-10, 171, 133))
+hsv_max = np.array((10, 191, 213))
+color_yellow = (0,255,255)
 #----------------------------------------------------------------------
 '''
 distCoeffs=[0.0189223469433419, -0.0206788674793396,0.003225513523750, 0.001510000668961]
 cameraMatrix=[[600.8293, 0, 330.2756],[0, 601.3519, 225.9791],[0, 0, 1.0000]]
+
+
+
+
 
 
 img = frame
@@ -57,7 +63,9 @@ cv2.aruco.drawAxis(img, cameraMatrix, distCoeffs, rvecs, tvecs, 0.1)
 
 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
+thresh = cv2.inRange(hsv, hsv_min, hsv_max)
 
 aruco_dict = aruco.Dictionary_get(cv2.aruco.DICT_4X4_250)
 
@@ -70,6 +78,30 @@ corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, paramete
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 
+
+
+
+
+moments = cv2.moments(thresh, 1)
+sum_y = moments['m01']
+sum_x = moments['m10']
+sum_pixel = moments['m00']
+
+if sum_pixel > 50:
+    x = int(sum_x / sum_pixel)
+    y = int(sum_y / sum_pixel)
+
+
+    frameCOlor1 = cv2.line(frame,(x,y),(0,0),(255,0,0),5)
+
+    
+    plt.imshow(frameCOlor1)
+
+
+    #Рисуем круг в центр светового питна.
+    cv2.circle(frame, (x, y), 10, (0, 0, 255), -1)
+    # Пишем координаты
+    cv2.putText(frame, "%d-%d" % (x, y), (x + 50, y - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, color_yellow, 2)
 
 
 
