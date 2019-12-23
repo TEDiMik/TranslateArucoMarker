@@ -1,21 +1,9 @@
 import httplib2
-import math
-#import cv2
-#import numpy as np
-#import cv2, PIL
-#from cv2 import aruco
-#import matplotlib.pyplot as plt
-#import matplotlib as mpl
-
-import numpy
-import cv2, PIL
+import cv2
 from cv2 import aruco
 import matplotlib.pyplot as plt
-import matplotlib as mpl
-import pandas as pd
 import numpy as np
-import cv2
-import glob
+
 
 #Loading image by link
 '''
