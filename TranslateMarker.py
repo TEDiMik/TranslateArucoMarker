@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+
+# I'm tired of giving concerts
+
 #Loading image by link
 '''
 h = httplib2.Http('.cache')
