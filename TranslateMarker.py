@@ -22,7 +22,7 @@ out.close()
 
 
 
-frame = cv2.imread("Sample/img2.jpg")
+frame = cv2.imread("Sample/imgWTF.jpg")
 
 
 hsv_min = np.array((-7, 123, 116))
@@ -89,17 +89,25 @@ if np.all(ids != None):
 
     
     #corners[id marker][NotUnderstand][angle][SmallNotUnderstand]
-    x = int (corners[1][0][0][0])
-    y = int (corners[1][0][0][1])
 
-    x1 = int (corners[2][0][0][0])
-    y1 = int (corners[2][0][0][1])
+    #На координатной (0,0)(PS маркер по середине)
+    x0 = int (corners[1][0][0][0])
+    y0 = int (corners[1][0][0][1])
+
+    #Ось X
+    x2 = int (corners[2][0][0][0])
+    y2 = int (corners[2][0][0][1])
+
+    #Ось Y
+    x1 = int (corners[0][0][0][0])
+    y1 = int (corners[0][0][0][1])
+
 
     #dist = calculateDistance(x,y,x1,y1) #In old code
     #print('DISTANCE: ', dist)
 
-    frameCOlor = cv2.line(frame_markers,(x,y),(0,0),(255,0,0),5)
-    frameCOlor = cv2.line(frame_markers,(x1,y1),(0,0),(255,0,0),5)
+    frameCOlor = cv2.line(frame_markers,(x0,y0),(x2,y2),(255,0,0),5)
+    frameCOlor = cv2.line(frame_markers,(x0,y0),(x1,y1),(255,0,0),5)
     print('x =', x)
     print('y =', y)
 
