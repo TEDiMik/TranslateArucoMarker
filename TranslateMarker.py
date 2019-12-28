@@ -22,7 +22,7 @@ out.close()
 
 
 
-frame = cv2.imread("Sample/imgWTF.jpg")
+frame = cv2.imread("Sample/img6.jpg")
 
 
 hsv_min = np.array((-7, 123, 116))
@@ -53,7 +53,7 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 
 
 
-
+#Detect red point objects
 moments = cv2.moments(thresh, 1)
 sum_y = moments['m01']
 sum_x = moments['m10']
@@ -61,53 +61,64 @@ sum_pixel = moments['m00']
 
 if sum_pixel > 5:
     #Coordinate red point object
-    x = int(sum_x / sum_pixel)
-    y = int(sum_y / sum_pixel)
+    x_RedPoint = int(sum_x / sum_pixel)
+    y_RedPoint = int(sum_y / sum_pixel)
 
-    frameCOlor1 = cv2.line(frame,(x,y),(0,0),(255,0,0),5)
+    frameCOlor1 = cv2.line(frame,(x_RedPoint,y_RedPoint),(0,0),(255,0,0),5)
     plt.imshow(frameCOlor1)
     #Paint circle in coordinate red point
-    cv2.circle(frame, (x, y), 10, (0, 0, 255), -1)
+    cv2.circle(frame, (x_RedPoint, y_RedPoint), 10, (0, 0, 255), -1)
     # write coordinate
-    cv2.putText(frame, "%d-%d" % (x, y), (x + 50, y - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, color_yellow, 2)
+    cv2.putText(frame, "%d-%d" % (x_RedPoint, y_RedPoint), (x_RedPoint + 50, y_RedPoint - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, color_yellow, 2)
 
 
-# if markers found 
+# if markers finding 
 if np.all(ids != None):
 
-    
+    #Короч берем центр координат макреа и центр точки обьекта из большего вычитаем меньшее и получаем координаты обьекта
 
     frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
+
+    x = int (corners[1][0][0][0]) + int((int(corners[0][0][2][0]) - int (corners[0][0][0][0])) / 2)
+    y = int (corners[1][0][0][1]) + int((int(corners[0][0][2][1]) - int (corners[0][0][0][1])) / 2)
 
     plt.figure()
     plt.imshow(frame_markers)
     for i in range(len(ids)):
         c = corners[i][0]
-        plt.plot([c[:, 0].mean()], [c[:, 1].mean()], "o", label = "id={0}".format(ids[i]))
+        if ids[i] == 101:
+            cv2.putText(frame_markers, "%d-%d" % (x, y), (x + 50, y - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, color_yellow, 2)
+        
+        #plt.plot([c[:, 0].mean()], [c[:, 1].mean()], "o", label = "id=".format(ids[i]))
     plt.legend()
     plt.show()
 
     
     #corners[id marker][NotUnderstand][angle][SmallNotUnderstand]
 
-    #На координатной (0,0)(PS маркер по середине)
-    x0 = int (corners[1][0][0][0])
-    y0 = int (corners[1][0][0][1])
+    #На координатной (0,0)
+    #Вычесление центра маркера
+    x0 = int (corners[1][0][0][0]) + int((int(corners[0][0][2][0]) - int (corners[0][0][0][0])) / 2)
+    y0 = int (corners[1][0][0][1]) + int((int(corners[0][0][2][1]) - int (corners[0][0][0][1])) / 2)
+
 
     #Ось X
     x2 = int (corners[2][0][0][0])
     y2 = int (corners[2][0][0][1])
 
     #Ось Y
-    x1 = int (corners[0][0][0][0])
-    y1 = int (corners[0][0][0][1])
+    x1 = int (corners[1][0][0][0])
+    y1 = int (corners[1][0][0][1])
+
+    print('Координаты точки: ', 'x = {0}; y = {1}'.format(x_RedPoint,y_RedPoint))
+    print('Координаты маркера: ', 'x = {0}; y = {1}'.format(x0,y0))
 
 
     #dist = calculateDistance(x,y,x1,y1) #In old code
     #print('DISTANCE: ', dist)
 
-    frameCOlor = cv2.line(frame_markers,(x0,y0),(x2,y2),(255,0,0),5)
-    frameCOlor = cv2.line(frame_markers,(x0,y0),(x1,y1),(255,0,0),5)
+    frameCOlor = cv2.line(frame_markers,(x0,y0),(0,0),(255,0,0),5)
+    #frameCOlor = cv2.line(frame_markers,(x0,y0),(x1,y1),(255,0,0),5)
     print('x =', x)
     print('y =', y)
 
