@@ -3,7 +3,7 @@ import cv2
 from cv2 import aruco
 import matplotlib.pyplot as plt
 import numpy as np
-
+import math
 
 
 # I'm tired of giving concerts
@@ -22,7 +22,7 @@ out.close()
 
 
 
-frame = cv2.imread("Sample/img6.jpg")
+frame = cv2.imread("Sample/img2.jpg")
 
 
 hsv_min = np.array((-7, 123, 116))
@@ -49,6 +49,10 @@ corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, paramete
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 
+
+def calculateDistance(x1,y1,x2,y2):  
+     dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)  
+     return dist  
 
 
 
@@ -98,8 +102,9 @@ if np.all(ids != None):
 
     #На координатной (0,0)
     #Вычесление центра маркера
-    x0 = int (corners[1][0][0][0]) + int((int(corners[0][0][2][0]) - int (corners[0][0][0][0])) / 2)
-    y0 = int (corners[1][0][0][1]) + int((int(corners[0][0][2][1]) - int (corners[0][0][0][1])) / 2)
+    x0 = int (corners[0][0][0][0]) + int((int(corners[0][0][2][0]) - int (corners[0][0][0][0])) / 2)
+    y0 = int (corners[0][0][0][1]) + int((int(corners[0][0][2][1]) - int (corners[0][0][0][1])) / 2)
+
 
 
     #Ось X
@@ -107,21 +112,24 @@ if np.all(ids != None):
     y2 = int (corners[2][0][0][1])
 
     #Ось Y
-    x1 = int (corners[1][0][0][0])
-    y1 = int (corners[1][0][0][1])
+    #x1 = int (corners[1][0][0][0])
+    #y1 = int (corners[1][0][0][1])
 
-    print('Координаты точки: ', 'x = {0}; y = {1}'.format(x_RedPoint,y_RedPoint))
-    print('Координаты маркера: ', 'x = {0}; y = {1}'.format(x0,y0))
+    x1 = int (corners[1][0][0][0]) + int((int(corners[1][0][2][0]) - int (corners[1][0][0][0])) / 2)
+    y1 = int (corners[1][0][0][1]) + int((int(corners[1][0][2][1]) - int (corners[1][0][0][1])) / 2)
+            
 
 
     #dist = calculateDistance(x,y,x1,y1) #In old code
     #print('DISTANCE: ', dist)
 
-    frameCOlor = cv2.line(frame_markers,(x0,y0),(0,0),(255,0,0),5)
+    frameCOlor = cv2.line(frame_markers,(x0,y0),(x1,y1),(255,0,0),5)
     #frameCOlor = cv2.line(frame_markers,(x0,y0),(x1,y1),(255,0,0),5)
     print('x =', x)
     print('y =', y)
 
+
+    print(calculateDistance(x0,y0,x1,y2))
     
     plt.imshow(frameCOlor)
     
@@ -200,17 +208,4 @@ def MarkerDetection4x4(path):
     rvecs, tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners, 0.045, cameraMatrix, distCoeffs)
     cv2.aruco.drawAxis(img, cameraMatrix, distCoeff, rvecs, tvecs, 0.1)
 '''
-
-
-
-
-
-
-
-
-
-
-#End programm
-#For my self
-print('Все')
 
