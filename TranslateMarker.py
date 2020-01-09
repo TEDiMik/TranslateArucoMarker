@@ -17,8 +17,7 @@ out.write(content)
 out.close()
 '''
 
-
-
+print(round(16.3333333333333*15))
 
 
 
